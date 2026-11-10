@@ -1,0 +1,29 @@
+name: Prueba de protección
+
+on:
+  pull_request:
+    branches:
+      - master
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  protection-check:
+    name: check de CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v7.0.1
+
+      - name: Evaluar señal de fallo temporal
+        shell: bash
+        run: |
+          if [[ -f FAIL_CI ]]; then
+            echo "Fallo intencional para comprobar el bloqueo del PR."
+            exit 1
+          fi
+          echo "Check de prueba correcto."
